@@ -1,6 +1,6 @@
 # illotka
 
-Simulate the ill-conditioned Lotka-Volterra model
+Simulate the ill-conditioned Lotka-Volterra model.
 
 ## Dependencies
 
