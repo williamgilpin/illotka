@@ -1,5 +1,22 @@
 from scipy.integrate import solve_ivp
 import numpy as np
+import warnings
+
+try:
+    from numba import njit
+except ImportError:
+    warnings.warn("Numba not installed. Using slower Python implementation.")
+    njit = lambda x: x
+
+@njit
+def lotka_rhs(t, x, A, r, d):
+    # Use np.dot instead of np.matmul for Numba compatibility
+    return x * (r + np.dot(A, x))
+
+@njit
+def lotka_jac(t, x, A, r, d):
+    # Replace np.matmul with np.dot
+    return np.diag(r + np.dot(A, x)) + A * x[:, None]
 
 
 class RandomLotkaVolterra:
@@ -21,7 +38,8 @@ class RandomLotkaVolterra:
         tolerance (float): tolerance for stopping the integration
 
     References:
-        Serván et al. (2018).
+        Serván et al. Coexistence of many species in random ecosystems. Nature 
+            Ecology & Evolution. 2018.
     """
     def __init__(self, n, sigma=1.0, kfrac=1/200, eps=0.0, connectivity=1.0, d=1.0, random_state=0, n_max=1000, 
                  early_stopping=True, verbose=False, tolerance=1e-10):
@@ -85,11 +103,15 @@ class RandomLotkaVolterra:
             print(f"Rank observed: {np.linalg.matrix_rank(self.A)}")
 
     def __call__(self, t, x):
-        return x * (self.r + np.matmul(self.A, x))
+        return lotka_rhs(t, x, self.A, self.r, self.d)
     
     def jac(self, t, x):
-        return np.diag(self.r + np.matmul(self.A, x)) + self.A * x[:, None]
+        return lotka_jac(t, x, self.A, self.r, self.d)
     
+    def integrate(self, tmax, x0, **kwargs):
+        fsol = solve_ivp(self, [0, tmax], x0, jac=self.jac, **self.integrator_args, **kwargs)
+        return fsol.t, fsol.y.T
+
     @property
     def integrator_args(self, **kwargs):
         """Default integrator arguments."""
@@ -115,3 +137,27 @@ class RandomLotkaVolterra:
         ## update with user-provided arguments, if given
         integrator_args.update(kwargs)
         return integrator_args
+    
+
+
+class GaussianLotkaVolterra(RandomLotkaVolterra):
+    """ 
+    The Gaussian Lotka-Volterra model. A special case of the RandomLotkaVolterra model 
+    where the interaction matrix is Gaussian.
+
+    Parameters:
+        n (int): number of species
+        sigma (float): standard deviation of interaction strengths
+        kfrac (float): fraction of species that are swapped
+        eps (float): strength of perturbation
+        connectivity (float): fraction of nonzero interactions
+    """
+    def __init__(self, n, sigma=1.0, kfrac=0, eps=0.0, connectivity=1.0, d=1.0, random_state=None, n_max=1000, 
+                 early_stopping=True, verbose=False, tolerance=1e-6):
+        super().__init__(n, sigma, kfrac, eps, connectivity, d, random_state, n_max, early_stopping, verbose, tolerance)
+        
+
+        # self.A = np.random.normal(size=(n, n), scale=self.sigma)
+        # self.A = self.A * (np.random.uniform(size=(n, n)) < self.connectivity)
+        # np.fill_diagonal(self.A, self.dvals)
+        

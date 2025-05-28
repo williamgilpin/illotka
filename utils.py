@@ -34,3 +34,24 @@ def bilinear_interpolation(xa, xb, ya, yb, s, t):
     P1 = s * xa + (1 - s) * xb
     P2 = s * ya + (1 - s) * yb
     return t * P1 + (1 - t) * P2
+
+def progress_bar(i, n, n_bar=20):
+    """
+    Print a progress bar to stdout
+
+    Args:
+        i (int): Current iteration
+        n (int): Total number of iterations
+        n_bar (int): Number of characters in the progress bar
+
+    Returns:
+        None
+    """
+    idots = int(i / n * n_bar)
+    stars = '#' * idots
+    spaces = ' ' * (n_bar - idots)
+    bar_str = f"[{stars}{spaces}] "
+    print(bar_str, end='\r')
+    if i == n - 1:
+        print("\n")
+    return None
