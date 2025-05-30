@@ -1,3 +1,46 @@
+
+import numpy as np
+
+
+from scipy.stats import truncnorm
+def normal_truncated(size, mu=0, sigma=1, clip=1):
+    """
+    Sample from a truncated normal distribution.
+
+    Args:
+        size: The number of samples to draw.
+        mu: The mean of the normal distribution.
+        sigma: The standard deviation of the normal distribution.
+        clip: The truncation point.
+
+    Returns:
+        The samples from the truncated normal distribution.
+    """
+    a, b = -clip, clip
+    samples = truncnorm.rvs(a, b, loc=mu, scale=sigma, size=size)
+    samples /= np.std(samples)
+    return samples
+
+
+def normal_generalized(size, mu=0, sigma=1, beta=0.1):
+    """
+    Sample from a generalized normal distribution.
+
+    Args:
+        size: The number of samples to draw.
+        mu: The mean of the distribution.
+        sigma: The standard deviation of the distribution.
+        beta: The shape parameter of the distribution.
+
+    Returns:
+        The samples from the generalized normal distribution.
+    """
+    samples = gennorm.rvs(beta, loc=mu, scale=sigma, size=size)
+    samples /= np.std(samples)
+    return samples
+
+
+
 def levenshtein(a, b):
     "Calculates the Levenshtein distance between two lists a and b."
     n, m = len(a), len(b)
