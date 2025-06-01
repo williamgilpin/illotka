@@ -98,3 +98,23 @@ def progress_bar(i, n, n_bar=20):
     if i == n - 1:
         print("\n")
     return None
+
+
+def bilinear_interpolation(xa, xb, ya, yb, s, t):
+    """
+    Perform bilinear interpolation on a grid of points.
+
+    Args:
+        xa (np.ndarray): x-coordinates of the lower left corner of the grid
+        xb (np.ndarray): x-coordinates of the lower right corner of the grid
+        ya (np.ndarray): y-coordinates of the lower left corner of the grid
+        yb (np.ndarray): y-coordinates of the upper left corner of the grid
+        s (float): Value between 0 and 1 for the x-coordinate
+        t (float): Value between 0 and 1 for the y-coordinate
+
+    Returns:
+        The interpolated value
+    """
+    P1 = s * xa + (1 - s) * xb
+    P2 = s * ya + (1 - s) * yb
+    return t * P1 + (1 - t) * P2
