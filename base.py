@@ -41,8 +41,9 @@ class RandomLotkaVolterra:
         Serván et al. Coexistence of many species in random ecosystems. Nature 
             Ecology & Evolution. 2018.
     """
-    def __init__(self, n_species=200, sigma=1.0, kfrac=1/200, eps=0.0, connectivity=1.0, d=1.0, random_state=0, n_max=1000, 
+    def __init__(self, n_species=200, sigma=2.0, kfrac=0.2, eps=1e-7, connectivity=0.05, d=4.5, random_state=0, n_max=1000, 
                  early_stopping=True, verbose=False, tolerance=1e-10):
+        # random_state=0, eps=1e-7, sigma=2.0, d=4.5, kfrac=0.2, connectivity=0.05)
         self.n = n_species
         self.d = d
         self.sigma = sigma
@@ -50,6 +51,7 @@ class RandomLotkaVolterra:
         self.early_stopping = early_stopping
         self.verbose = verbose
         self.tolerance = tolerance
+        n = n_species
 
         self.kfrac = kfrac
         self.eps = eps

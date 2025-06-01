@@ -21,7 +21,7 @@ def normal_truncated(size, mu=0, sigma=1, clip=1):
     samples /= np.std(samples)
     return samples
 
-
+from scipy.stats import gennorm
 def normal_generalized(size, mu=0, sigma=1, beta=0.1):
     """
     Sample from a generalized normal distribution.
@@ -118,3 +118,18 @@ def bilinear_interpolation(xa, xb, ya, yb, s, t):
     P1 = s * xa + (1 - s) * xb
     P2 = s * ya + (1 - s) * yb
     return t * P1 + (1 - t) * P2
+
+
+def compute_settling_time(traj, tvals=None, eps=1e-6):
+    """
+    Compute the settling time from a multivariate time series. 
+    If the trajectory does not reach the steady-state within the integration time, 
+    return a NaN.
+    """
+    final_value = traj[-1]
+    scaled_distance = (np.linalg.norm(traj - final_value, axis=1)) / np.linalg.norm(traj, axis=1)
+    final_index = np.where(scaled_distance < eps)[0]
+    if len(final_index) == 0:
+        return np.nan
+    else:
+        return final_index[0]
