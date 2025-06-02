@@ -45,6 +45,7 @@ class RandomLotkaVolterra:
                  early_stopping=True, verbose=False, tolerance=1e-10):
         # random_state=0, eps=1e-7, sigma=2.0, d=4.5, kfrac=0.2, connectivity=0.05)
         self.n = n_species
+        self.n_species = n_species
         self.d = d
         self.sigma = sigma
         self.connectivity = connectivity
@@ -148,15 +149,15 @@ class GaussianLotkaVolterra(RandomLotkaVolterra):
     where the interaction matrix is Gaussian.
 
     Parameters:
-        n (int): number of species
+        n_species (int): number of species
         sigma (float): standard deviation of interaction strengths
         kfrac (float): fraction of species that are swapped
         eps (float): strength of perturbation
         connectivity (float): fraction of nonzero interactions
     """
-    def __init__(self, n, sigma=1.0, kfrac=0, eps=0.0, connectivity=1.0, d=1.0, random_state=None, n_max=1000, 
+    def __init__(self, n_species=200, sigma=1.0, kfrac=0, eps=0.0, connectivity=1.0, d=1.0, random_state=None, n_max=1000, 
                  early_stopping=True, verbose=False, tolerance=1e-6):
-        super().__init__(n, sigma, kfrac, eps, connectivity, d, random_state, n_max, early_stopping, verbose, tolerance)
+        super().__init__(n_species, sigma, kfrac, eps, connectivity, d, random_state, n_max, early_stopping, verbose, tolerance)
         
 
         # self.A = np.random.normal(size=(n, n), scale=self.sigma)
