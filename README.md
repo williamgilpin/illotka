@@ -11,7 +11,11 @@ Simulate the ill-conditioned Lotka-Volterra model.
 
 ## Usage
 
-See the accompanying Jupyter notebook [`demos.ipynb`](demos.ipynb)
++ A [Jupyter notebook](demos.ipynb) that demonstrates the use of the `illotka` package.
+
++ [Link to Google Colab notebook](https://colab.research.google.com/github/williamgilpin/illotka/blob/main/demos.ipynb)
+
++ [Link to static webpage](https://williamgilpin.github.io/illotka/demos.html)
 
 
 ## The ill-conditioned Lotka-Volterra model
@@ -38,4 +42,19 @@ $$
 
 where $Q_{ij} \sim \mathcal{N}(0,1)$, $E_{ij} \sim \mathcal{N}(0,1)$, $P$ is a low-rank matrix imposing functional redundancy, $d$ is a constant density-limitation, and $\epsilon \ll 1$ is a small constant.
 
+## Reference
 
+If you find this code or notebook useful, please consider citing the [paper](https://doi.org/10.1371/journal.pcbi.1013051) that describes the method.
+
+```bibtex
+@article{gilpin2025optimization,
+    title={Optimization hardness constrains ecological transients},
+    author={Gilpin, William},
+    journal={PLOS Computational Biology},
+    volume={21},
+    number={5},
+    pages={e1013051},
+    year={2025},
+    publisher={Public Library of Science San Francisco, CA USA}
+}
+```
